@@ -4,7 +4,8 @@ import logger from 'morgan';
 import 'dotenv/config';
 import mongoose from 'mongoose';
 import apiRouter from './routes/api';
-import { INext, IReq, IRes } from './types';
+import session from 'express-session';
+import { INext, IReq, IRes } from './types/types';
 import { nanoid } from 'nanoid';
 
 const app = express();
@@ -17,17 +18,33 @@ async function connectToDB() {
 }
 connectToDB().catch((err) => console.log(`Database connection error: ${err}`));
 
+const getSecret = () => {
+  const secret = process.env.SECRET;
+  if (!secret) {
+    throw new Error('.env secret key not found! Sessions need a secret key.');
+  }
+  return secret;
+};
+
+app.use(
+  session({
+    secret: getSecret(),
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'build')));
 
-app.use('/api/', apiRouter);
+app.use('/api', apiRouter);
 
 app.get('/', (req: IReq, res: IRes) => {
   const userId: string | undefined = req.cookies.userId;
   if (!userId) {
-    res.cookie('user_id', nanoid(), {
+    res.cookie('userId', nanoid(), {
       maxAge: 1000 * 60 * 60 * 24 * 365,
       httpOnly: true,
     });

@@ -8,7 +8,7 @@ import http from 'http';
 import debug from 'debug';
 import app from '../app';
 
-const serverDebug = debug('members-only:server');
+const serverDebug = debug('photo-tag-app:server');
 
 /**
  * Normalize a port into a number, string, or false.
