@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { IWaldo } from './mongoose/Waldo';
 
 export interface ISessionWaldo {
-  [k: string]: IWaldo;
+  [k: string]: IWaldo & { found: boolean };
 }
 
 declare module 'express-session' {
