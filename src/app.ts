@@ -3,30 +3,37 @@ import path from 'path';
 import logger from 'morgan';
 import 'dotenv/config';
 import mongoose from 'mongoose';
-import apiRouter from './routes/v1';
+import apiRouter from './routes/api';
 import { INext, IReq, IRes } from './types';
+import { nanoid } from 'nanoid';
 
 const app = express();
 mongoose.set('strictQuery', true);
 
-const mongoDBURI: string = process.env.MONGODB_URI ?? '';
-
 async function connectToDB() {
+  const mongoDBURI: string = process.env.MONGODB_URI ?? '';
   console.log(mongoDBURI);
   await mongoose.connect(mongoDBURI);
 }
 connectToDB().catch((err) => console.log(`Database connection error: ${err}`));
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'build')));
 
 app.use('/api/', apiRouter);
+
+app.get('/', (req: IReq, res: IRes) => {
+  const userId: string | undefined = req.cookies.userId;
+  if (!userId) {
+    res.cookie('user_id', nanoid(), {
+      maxAge: 1000 * 60 * 60 * 24 * 365,
+      httpOnly: true,
+    });
+  }
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 // Catch 404
 app.use((req: IReq, res: IRes) => {
