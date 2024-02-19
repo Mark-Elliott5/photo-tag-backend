@@ -1,8 +1,10 @@
 import { Router } from 'express';
-import expressAsyncHandler from 'express-async-handler';
-import { IReq, IRes, INext } from '../types';
+import { IReq, IRes, INext } from '../types/types';
+import { startGame } from '../controllers/apiController';
 
 const apiRouter = Router();
+
+apiRouter.get('/start', startGame);
 
 // Catch 404
 apiRouter.use((req: IReq, res: IRes) => {
