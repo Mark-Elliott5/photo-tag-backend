@@ -1,12 +1,18 @@
 import { Router } from 'express';
 import { IReq, IRes, INext } from '../types/types';
-import { guessWaldo, startGame } from '../controllers/apiController';
+import {
+  guessWaldo,
+  startGame,
+  submitName,
+} from '../controllers/apiController';
 
 const apiRouter = Router();
 
 apiRouter.get('/start', startGame);
 
-apiRouter.get('/guess', guessWaldo);
+apiRouter.post('/guess', guessWaldo);
+
+apiRouter.post('/name', submitName);
 
 // Catch 404
 apiRouter.use((req: IReq, res: IRes) => {

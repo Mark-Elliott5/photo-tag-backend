@@ -7,13 +7,13 @@ import apiRouter from './routes/api';
 import session from 'express-session';
 import { INext, IReq, IRes } from './types/types';
 import { nanoid } from 'nanoid';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 mongoose.set('strictQuery', true);
 
 async function connectToDB() {
   const mongoDBURI: string = process.env.MONGODB_URI ?? '';
-  console.log(mongoDBURI);
   await mongoose.connect(mongoDBURI);
 }
 connectToDB().catch((err) => console.log(`Database connection error: ${err}`));
@@ -34,21 +34,24 @@ app.use(
   })
 );
 
+app.use(cookieParser());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'build')));
 
+app.use((req: IReq, res: IRes, next: INext) => {
+  const { userId }: { userId: string | undefined } = req.cookies;
+  if (!userId) {
+    const id = nanoid();
+    res.cookie('userId', id);
+  }
+  next();
+});
+
 app.use('/api', apiRouter);
 
 app.get('/', (req: IReq, res: IRes) => {
-  const userId: string | undefined = req.cookies.userId;
-  if (!userId) {
-    res.cookie('userId', nanoid(), {
-      maxAge: 1000 * 60 * 60 * 24 * 365,
-      httpOnly: true,
-    });
-  }
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
@@ -67,7 +70,7 @@ app.use((req: IReq, res: IRes) => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: Error, req: IReq, res: IRes, next: INext): void => {
   // set locals, only providing error in development
-  console.log('Error caught');
+  console.log('App.ts error caught');
   console.log(err);
 
   res.locals.message = err.message;

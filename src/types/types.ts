@@ -15,6 +15,15 @@ declare module 'express-session' {
   }
 }
 
+export interface IGuessName {
+  coords: { x: number; y: number };
+  waldo: string;
+}
+
+export interface ISubmitName {
+  name: string;
+}
+
 export interface IReq<T = void> extends Request {
   body: T;
 }
