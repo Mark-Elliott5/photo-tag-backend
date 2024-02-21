@@ -5,6 +5,11 @@ import { Player } from '../types/mongoose/Player';
 
 const asyncHandler = expressAsyncHandler;
 
+const getLeaderboard = asyncHandler(async (req: IReq, res: IRes) => {
+  const leaderboard = await Player.find({}).exec();
+  res.json(leaderboard);
+});
+
 const guessWaldo = asyncHandler(async (req: IReq<IGuessName>, res: IRes) => {
   if (!req.cookies.userId) {
     console.log('No cookie');
@@ -41,8 +46,7 @@ const guessWaldo = asyncHandler(async (req: IReq<IGuessName>, res: IRes) => {
 
   const { minX, maxX, minY, maxY } = waldo;
   const { x, y } = req.body.coords;
-  const correct =
-    x >= minX && x <= maxX && y >= minY && y <= maxY ? true : false;
+  const correct = (x >= minX && x <= maxX && y >= minY && y <= maxY) ?? false;
 
   if (correct) {
     req.session.correctCount += 1;
@@ -90,6 +94,7 @@ const submitName = asyncHandler(async (req: IReq<ISubmitName>, res: IRes) => {
 
   // Player time should be stored in milliseconds.
   // Time is the difference in milliseconds.
+  // new Date() because express-session serializes in JSON (Date obj becomes string)
   const time = Math.abs(
     new Date(req.session.endDate).getTime() -
       new Date(req.session.startDate).getTime()
@@ -105,4 +110,4 @@ const submitName = asyncHandler(async (req: IReq<ISubmitName>, res: IRes) => {
   res.json({ accepted: true });
 });
 
-export { guessWaldo, startGame, submitName };
+export { guessWaldo, getLeaderboard, startGame, submitName };

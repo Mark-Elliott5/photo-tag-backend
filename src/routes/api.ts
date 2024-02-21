@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { IReq, IRes, INext } from '../types/types';
 import {
+  getLeaderboard,
   guessWaldo,
   startGame,
   submitName,
@@ -8,9 +9,11 @@ import {
 
 const apiRouter = Router();
 
-apiRouter.get('/start', startGame);
+apiRouter.get('/leaderboard', getLeaderboard);
 
 apiRouter.post('/guess', guessWaldo);
+
+apiRouter.get('/start', startGame);
 
 apiRouter.post('/name', submitName);
 
