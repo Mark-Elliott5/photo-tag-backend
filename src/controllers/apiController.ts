@@ -6,7 +6,7 @@ import { Player } from '../types/mongoose/Player';
 const asyncHandler = expressAsyncHandler;
 
 const getLeaderboard = asyncHandler(async (req: IReq, res: IRes) => {
-  const leaderboard = await Player.find({}).exec();
+  const leaderboard = await Player.find({}).sort({ time: 1 }).limit(50).exec();
   res.json(leaderboard);
 });
 
@@ -17,7 +17,7 @@ const guessWaldo = asyncHandler(async (req: IReq<IGuessName>, res: IRes) => {
   }
 
   if (!req.session) {
-    console.log('No Session');
+    console.log('No session');
     throw new Error('No session.');
   }
 
@@ -92,6 +92,12 @@ const submitName = asyncHandler(async (req: IReq<ISubmitName>, res: IRes) => {
     throw new Error('Win conditions not met.');
   }
 
+  const { name } = req.body;
+
+  if (name.length > 20 || name.length < 1) {
+    throw new Error('Name must be between 1 - 20 characters.');
+  }
+
   // Player time should be stored in milliseconds.
   // Time is the difference in milliseconds.
   // new Date() because express-session serializes in JSON (Date obj becomes string)
@@ -100,13 +106,24 @@ const submitName = asyncHandler(async (req: IReq<ISubmitName>, res: IRes) => {
       new Date(req.session.startDate).getTime()
   );
 
-  const { name } = req.body;
-  const player = new Player({
-    name,
-    time,
-  });
+  // Check if user's new time is faster
+  const oldPlayerDoc = await Player.findOne({
+    userId: req.cookies.userId,
+  }).exec();
+  if (oldPlayerDoc) {
+    if (oldPlayerDoc.time > time) {
+      oldPlayerDoc.time = time;
+      await oldPlayerDoc.save();
+    }
+  } else {
+    const player = new Player({
+      name,
+      time,
+      userId: req.cookies.userId,
+    });
+    await player.save();
+  }
 
-  await player.save();
   res.json({ accepted: true });
 });
 

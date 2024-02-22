@@ -3,8 +3,8 @@
 import 'dotenv/config';
 import mongoose from 'mongoose';
 
-import { IWaldo, Waldo } from '../src/types/mongoose/Waldo';
-import { IPlayer, Player } from '../src/types/mongoose/Player';
+import { IWaldo, Waldo } from './Waldo';
+import { IPlayer, Player } from './Player';
 
 console.log(
   'Populating the designated MongoDB database with the provided data...'
@@ -179,7 +179,7 @@ async function createAllWaldos() {
       maxY: 82,
     }),
     waldoCreator({
-      name: 'Raiden MK',
+      name: 'Raiden',
       minX: 14,
       minY: 72,
       maxX: 20,
@@ -199,6 +199,62 @@ async function createAllWaldos() {
       maxX: 49,
       maxY: 72,
     }),
+    waldoCreator({
+      name: 'Goose',
+      minX: 71,
+      minY: 55,
+      maxX: 76,
+      maxY: 58,
+    }),
+    waldoCreator({
+      name: 'Lupin The Third',
+      minX: 66,
+      minY: 75,
+      maxX: 70,
+      maxY: 81,
+    }),
+    waldoCreator({
+      name: `Captain K'nuckles`,
+      minX: 66,
+      minY: 18,
+      maxX: 69,
+      maxY: 21,
+    }),
+    waldoCreator({
+      name: 'Lady Dimitrescu',
+      minX: 81,
+      minY: 66,
+      maxX: 92,
+      maxY: 73,
+    }),
+    waldoCreator({
+      name: 'Deadpool',
+      minX: 92,
+      minY: 92,
+      maxX: 97,
+      maxY: 98,
+    }),
+    waldoCreator({
+      name: 'Rocko',
+      minX: 65,
+      minY: 68,
+      maxX: 69,
+      maxY: 70,
+    }),
+    waldoCreator({
+      name: 'Skeletor',
+      minX: 91,
+      minY: 87,
+      maxX: 97,
+      maxY: 92,
+    }),
+    waldoCreator({
+      name: 'Invader Zim',
+      minX: 84,
+      minY: 11,
+      maxX: 88,
+      maxY: 12,
+    }),
   ]);
 }
 
@@ -214,103 +270,128 @@ async function createAllPlayers() {
   await Promise.all([
     playerCreator({
       name: 'Aang',
-      time: 180000,
+      time: 60000,
+      userId: 'null',
     }),
     playerCreator({
       name: 'G-Man',
-      time: 285000,
+      time: 90000,
+      userId: 'null',
     }),
     playerCreator({
       name: 'Ice King',
-      time: 390000,
+      time: 120000,
+      userId: 'null',
     }),
     playerCreator({
       name: 'Mikasa',
-      time: 495000,
+      time: 150000,
+      userId: 'null',
     }),
     playerCreator({
       name: 'Ghostface',
-      time: 600000,
+      time: 180000,
+      userId: 'null',
     }),
     playerCreator({
       name: 'Togemon',
-      time: 705000,
+      time: 210000,
+      userId: 'null',
     }),
     playerCreator({
       name: 'Max Headroom',
-      time: 810000,
+      time: 240000,
+      userId: 'null',
     }),
     playerCreator({
       name: 'Old Snake',
-      time: 915000,
+      time: 270000,
+      userId: 'null',
     }),
     playerCreator({
       name: 'Reze',
-      time: 1020000,
+      time: 300000,
+      userId: 'null',
     }),
     playerCreator({
       name: 'Phoenix Wright',
-      time: 1125000,
+      time: 330000,
+      userId: 'null',
     }),
     playerCreator({
       name: 'Fry',
-      time: 1230000,
+      time: 360000,
+      userId: 'null',
     }),
     playerCreator({
       name: 'Adam Jensen',
-      time: 1335000,
+      time: 390000,
+      userId: 'null',
     }),
     playerCreator({
       name: 'Yoshimitsu',
-      time: 1440000,
+      time: 420000,
+      userId: 'null',
     }),
     playerCreator({
       name: 'Hank Hill',
-      time: 1545000,
+      time: 450000,
+      userId: 'null',
     }),
     playerCreator({
       name: 'Skull Knight',
-      time: 1650000,
+      time: 480000,
+      userId: 'null',
     }),
     playerCreator({
       name: 'Jetstream Sam',
-      time: 1755000,
+      time: 510000,
+      userId: 'null',
     }),
     playerCreator({
       name: 'Afro Samurai',
-      time: 1860000,
+      time: 540000,
+      userId: 'null',
     }),
     playerCreator({
       name: 'The Dude',
-      time: 1965000,
+      time: 570000,
+      userId: 'null',
     }),
     playerCreator({
       name: 'Chun Li',
-      time: 2070000,
+      time: 600000,
+      userId: 'null',
     }),
     playerCreator({
       name: 'Isaac Clarke',
-      time: 2175000,
+      time: 630000,
+      userId: 'null',
     }),
     playerCreator({
       name: 'Mr. X',
-      time: 2280000,
+      time: 660000,
+      userId: 'null',
     }),
     playerCreator({
       name: 'Vash',
-      time: 2385000,
+      time: 690000,
+      userId: 'null',
     }),
     playerCreator({
       name: 'Raiden MK',
-      time: 2490000,
+      time: 720000,
+      userId: 'null',
     }),
     playerCreator({
       name: 'Gollum',
-      time: 2595000,
+      time: 750000,
+      userId: 'null',
     }),
     playerCreator({
       name: 'Tintin',
-      time: 2700000,
+      time: 780000,
+      userId: 'null',
     }),
   ]);
 }
