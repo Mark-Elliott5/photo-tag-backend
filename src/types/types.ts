@@ -15,7 +15,7 @@ declare module 'express-session' {
   }
 }
 
-export interface IGuessName {
+export interface IGuessWaldo {
   coords: { x: number; y: number };
   waldo: string;
 }
