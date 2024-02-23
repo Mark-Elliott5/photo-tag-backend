@@ -1,3 +1,6 @@
+Site is currently deployed [here](https://search-party.onrender.com).
+Monorepo located [here](https://github.com/Mark-Elliott5/photo-tag-app).
+
 This photo-tag-backend project features:
 
 - Typescript
@@ -8,8 +11,11 @@ This photo-tag-backend project features:
 - Rate limiting
 - Profanity filter
 
-This backend is to be used with my photo-tag-frontend repository. To use this app, clone photo-tag-frontend and build the app with 'npm run build', then place the resulting folder inside dist as "build". This backend will serve the React SPA
-on the index route, then handle user input on the /api/ route to handle
-supplying Waldos, guesses, wins, and the leaderboard.
+This backend is to be used with my photo-tag-frontend repository.
+Navigate to the monorepo linked above for more information.
+
+This backend will serve a React SPA
+on the index route, then handle user input on the /api/ route to
+supply Waldos, check guesses, verify wins, and update the leaderboard.
 
 ![Search Party](images/searchparty.jpg)

@@ -21,11 +21,7 @@ const guessWaldoValidationFunctions = [
     .isNumeric()
     .withMessage('Y coordinate is not numeric.')
     .escape(),
-  body('waldo')
-    .exists()
-    .isString()
-    .withMessage('Waldo field must be a string')
-    .escape(),
+  body('waldo').exists().isString().withMessage('Waldo field must be a string'),
 ];
 
 const submitNameValidationFunctions = [
