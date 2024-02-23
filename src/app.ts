@@ -8,6 +8,7 @@ import session from 'express-session';
 import { INext, IReq, IRes } from './types/types';
 import { nanoid } from 'nanoid';
 import cookieParser from 'cookie-parser';
+import rateLimit from 'express-rate-limit';
 
 const app = express();
 mongoose.set('strictQuery', true);
@@ -25,6 +26,13 @@ const getSecret = () => {
   }
   return secret;
 };
+
+const limiter = rateLimit({
+  windowMs: 10 * 1000,
+  max: 200,
+});
+
+app.use(limiter);
 
 app.use(
   session({
