@@ -9,6 +9,7 @@ import { INext, IReq, IRes } from './types/types';
 import { nanoid } from 'nanoid';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
+import MongoStore from 'connect-mongo';
 
 const app = express();
 
@@ -16,11 +17,15 @@ app.set('trust proxy', true);
 
 mongoose.set('strictQuery', true);
 
-async function connectToDB() {
-  const mongoDBURI: string = process.env.MONGODB_URI ?? '';
-  await mongoose.connect(mongoDBURI);
-}
-connectToDB().catch((err) => console.log(`Database connection error: ${err}`));
+const mongoDBURI =
+  process.env.MONGODB_URI ??
+  (() => {
+    throw new Error(
+      'MongoDB connection string not found! Sessions need a connection string.'
+    );
+  })();
+
+const mongoClient = mongoose.connect(mongoDBURI);
 
 const getSecret = () => {
   const secret = process.env.SECRET;
@@ -30,20 +35,23 @@ const getSecret = () => {
   return secret;
 };
 
+app.use(
+  session({
+    store: MongoStore.create({
+      clientPromise: mongoClient.then((m) => m.connection.getClient()),
+    }),
+    secret: getSecret(),
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
 const limiter = rateLimit({
   windowMs: 10 * 1000,
   max: 200,
 });
 
 app.use(limiter);
-
-app.use(
-  session({
-    secret: getSecret(),
-    resave: false,
-    saveUninitialized: false,
-  })
-);
 
 app.use(cookieParser());
 app.use(logger('dev'));
