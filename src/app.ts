@@ -52,7 +52,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'build')));
 
 app.use((req: IReq, res: IRes, next: INext) => {
-  const { userId }: { userId: string | undefined } = req.cookies;
+  const { userId }: { userId?: string } = req.cookies;
   if (!userId) {
     const id = nanoid();
     res.cookie('userId', id);
